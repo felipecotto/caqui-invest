@@ -1,262 +1,377 @@
-# design.md · Caqui Invest
+# Caqui Invest — Design System
 
-Guia de design para quem constrói a interface da Caqui Invest, seja pessoa ou agente de IA. Leia antes de escrever qualquer tela. Fonte visual: [Figma · Caqui Invest Kit de UX de confiança](https://www.figma.com/design/tl9FFynv0PPlTdnLkGVPPb), página **Componentes**.
+Version: 0.2 (working draft)
+Status: Proposal; not approved for production
 
-> Base visual: [shadcn/ui](https://ui.shadcn.com/) com tamanhos e contrastes ajustados para acessibilidade (ver 3.1.1). A Caqui é fictícia. Dados, taxas e pessoas são sintéticos. Nada aqui pode imitar marca real.
+## Brand strategy
+- Audience: beginner investors.
+- Positioning: accessible investment brokerage with a sophisticated, non-elitist identity.
+- Value proposition: security and transparency; digital self-service with human support.
+- Voice: approachable, sophisticated, precise, never promising returns.
+- Visual direction: abstract editorial photography, custom typographic wordmark without literal fruit or leaves, Manrope + Inter.
 
-## 1. Para quem e por quê
+## Principles
+1. Clarity over decoration.
+2. Show risks, fees, liquidity, taxation and terms at the decision point.
+3. Progressive disclosure, never conceal essential financial information.
+4. One primary action per decision region.
+5. Shared tokens, responsive patterns designed for each context.
 
-- **Pessoa-guia:** Dona Marta, 63 anos, primeiro CDB, quer ver o dinheiro a cada passo. Se a interface funciona para ela, funciona para o Rafael (27 anos, quer resposta em 30 segundos).
-- **Dado:** 14 dos 50 clientes sintéticos têm 60 anos ou mais.
-- **Promessa da interface:** o cliente sempre vê **o que está acontecendo** (status, data, fonte) e sempre tem **uma saída** (pessoa, bloqueio, voltar).
+## Brand primitives
+| Token | Hex |
+|---|---|
+| brand.moss | #0B2B18 |
+| brand.ivory | #DDD2B7 |
+| brand.leafy | #82A591 |
+| brand.orange | #D95E00 |
 
-## 2. Regras que não se quebram
+## Neutral primitives (draft)
+| Token | Hex |
+|---|---|
+| neutral.50 | #FAFAF7 |
+| neutral.100 | #F4F5F0 |
+| neutral.200 | #E5E7E1 |
+| neutral.300 | #CDD3CA |
+| neutral.400 | #9BA69C |
+| neutral.500 | #66736B |
+| neutral.700 | #35473B |
+| neutral.900 | #17251D |
 
-1. **Nenhum texto abaixo de 16px.** Texto sempre em cinza (zinc); cor fica para ação, status e segurança.
-2. **Todo controle tocável tem no mínimo 48px de altura.**
-3. **Contraste AA:** 4,5:1 para texto, 3:1 para bordas de controles e ícones que carregam informação.
-4. **Cor nunca é a única informação.** Status tem ícone e texto, seleção tem check ou ponto, erro tem ícone e frase.
-5. **Rótulo sempre visível.** Placeholder não é rótulo.
-6. **Foco visível no teclado:** anel duplo, com 2px de `--cor-superficie` colado ao elemento e 2px de `--cor-tinta` por fora (ver 3.1).
-7. **Toda frase factual mostra a fonte** (artigo `KB-xxx`, operação `OP-xxxxx` ou posição `P-xxxx`) com o componente **Chip de fonte**.
-8. **"Falar com uma pessoa" fica fixo no rodapé** de toda tela de atendimento. Fora das 8h–20h, ele vira protocolo com horário de retorno.
-9. **Sinal de golpe troca a tela inteira** para o fluxo de segurança. Não vira mais uma mensagem.
-10. **Datas, IR e rendimento vêm do motor de cálculo.** O LLM só redige. Nenhum prazo é inventado.
-11. **Nenhuma recomendação de investimento.** Pedido de recomendação leva para o especialista.
+## Semantic tokens — light
+| Token | Reference |
+|---|---|
+| background.default | neutral.50 |
+| background.surface | #FFFFFF |
+| background.subtle | neutral.100 |
+| foreground.default | neutral.900 |
+| foreground.muted | neutral.500 |
+| border.default | neutral.200 |
+| action.primary | brand.moss |
+| action.on-primary | #FFFFFF |
+| action.accent | brand.orange |
+| focus.ring | brand.orange (provisional; test against surrounding surfaces) |
+| feedback.success | #247A4B |
+| feedback.danger | #B63C35 |
 
-## 3. Tokens
+Color meaning: orange is a brand accent, not a success indicator; financial gain/loss should never rely on color alone. All foreground/background combinations require WCAG contrast verification. Target >= 4.5:1 normal text, >= 3:1 large text and essential UI graphics.
 
-### 3.1 Cor
+## Typography
+- Display: Manrope Semibold 48/56
+- H1: Manrope Semibold 36/44
+- H2: Manrope Semibold 28/36
+- H3: Manrope Semibold 22/30
+- Body large: Inter Regular 16/24
+- Body: Inter Regular 14/22
+- Caption: Inter Regular 12/18 (noncritical)
+- Financial value: Inter Semibold 28/36; tabular numerals
+- Use Brazilian locale currency formatting, e.g. R$ 24.850,00.
 
-Base neutra na escala zinc (a mesma do shadcn/ui) e três cores de apoio com papel fixo: **verde** para ação e concluído, **laranja** para em andamento, **vermelho** só para segurança.
+## Spacing, radii and sizing
+- Spacing primitives: 4, 8, 12, 16, 24, 32, 48 px; extend to 64 and 80 for page composition.
+- Radius: 4 (sm), 8 (md), 12 (lg), 16 (xl) px.
+- Control heights: 32 (compact), 40 (default), 48 (comfortable/mobile) px.
+- Interactive touch targets: aim for at least 44x44 CSS px on mobile.
+- Responsive layout proposal: mobile < 768 px, tablet 768–1199 px, desktop >= 1200 px. These are starting breakpoints, not device classifications.
+- Desktop content max-width: 1200 px; mobile horizontal padding 16 px, desktop 24–32 px.
 
-| Token | Hex | Uso | Contraste no branco |
-| --- | --- | --- | ---: |
-| `--cor-tinta` | `#09090B` | Texto principal (zinc-950) | 19,9:1 |
-| `--cor-suave` | `#6B6B73` | Texto secundário e borda de campo | 5,3:1 (4,8:1 no zinc-100) |
-| `--cor-linha` | `#E4E4E7` | Divisores (zinc-200), nunca texto nem limite único de controle | 1,3:1 |
-| `--cor-fundo` | `#F4F4F5` | Fundo de tela e superfícies secundárias (zinc-100) | |
-| `--cor-superficie` | `#FFFFFF` | Cards e campos | |
-| `--cor-primaria` | `#1E4D33` | Verde Caqui: ação primária, seleção, concluído | 9,7:1 |
-| `--cor-primaria-suave` | `#E8F0EA` | Fundo de concluído e de item ativo | verde sobre ele 8,4:1 |
-| `--cor-destaque` | `#D95E00` | Laranja: só "em andamento" (ponto atual, progresso, ícone) | 3,8:1 |
-| `--cor-destaque-suave` | `#FFF1E6` | Fundo de atenção e de "em andamento" | |
-| `--cor-perigo` | `#B3261E` | Vermelho: só segurança e erro | 6,5:1 |
-| `--cor-perigo-suave` | `#FDECEA` | Fundo de alerta de segurança | vermelho sobre ele 5,7:1 |
-| `--cor-desabilitado` | `#A1A1AA` | Desabilitado (zinc-400), sempre com motivo escrito | 2,6:1 |
+## Component specifications (v0.2)
 
-**Como usar:**
-- Texto é sempre cinza: `--cor-tinta` ou `--cor-suave`. Cor em texto só em rótulo de status (verde em "Liquidada", vermelho em segurança).
-- O laranja nunca é texto: 3,8:1 serve para ícone e barra, não para corpo.
-- Nunca use `zinc-400` ou mais claro em texto.
-- Separação por espaço e por fundo (`--cor-fundo` x `--cor-superficie`), não por borda. Borda só em campo de formulário e botão secundário.
+### Button
+- Variants: primary, secondary, tertiary, destructive, link.
+- Sizes: sm 32, md 40, lg 48 px.
+- States: default, hover, pressed, focus-visible, disabled, loading.
+- Primary: moss background, white text, radius 8, 16 px horizontal padding minimum.
+- Disabled: do not convey state by opacity alone; remove action and provide explanation when useful.
+- Loading: preserve width; prevent duplicate submission; announce status accessibly.
+- Icon-only buttons require accessible labels.
 
-**Foco:** anel duplo, 2px branco colado ao elemento e 2px `--cor-tinta` por fora. Passa sobre qualquer fundo.
+### Text field
+- Variants: default, with prefix/suffix, search, currency, password.
+- States: empty, filled, focus, invalid, disabled, read-only, loading.
+- Persistent visible label, optional hint and error text; do not rely on placeholder as label.
+- Error: icon + text, not color alone.
+- Currency: accept locale-aware entry and format on blur; retain precision during editing.
 
-### 3.1.1 Relação com o shadcn/ui
+### Card
+- Variants: summary, product, educational, action, advisory.
+- States: static, interactive default/hover/focus, loading skeleton, empty, error.
+- Surface white, subtle border, radius 12, padding 16–24 px.
+- Interactive cards require a clear action and keyboard accessibility.
 
-| shadcn | Caqui | Por quê |
-| --- | --- | --- |
-| `--background` branco | `--cor-fundo` zinc-100, cards brancos | Separar sem borda |
-| `--primary` zinc-900 | `--cor-primaria` verde | Identidade da Caqui |
-| `--muted-foreground` zinc-500 (4,8:1) | `#6B6B73` (5,3:1) | Ainda passa AA sobre zinc-100 |
-| `--border` / `--input` zinc-200 | divisor zinc-200; campo `#6B6B73` | zinc-200 tem 1,3:1 e falha no WCAG 1.4.11 em campo |
-| `text-sm` (14px) | 16px mínimo | 14 de 50 clientes têm 60+ |
-| `h-9` (36px) | 48px mínimo | Alvo de toque |
-| `--radius` 0,625rem | 10px controles, 14px cards | Igual em espírito |
+### Badge / status
+- Variants: neutral, positive, warning, negative, informational.
+- Status labels must remain explicit; never use only color.
+- Distinguish product risk level from performance change.
 
-### 3.2 Tipografia
+### Table
+- Right-align numeric values; tabular numerals.
+- Sort states: none, ascending, descending; indicate active sort textually.
+- Mobile: prefer meaningful row-to-detail transformation over horizontal truncation.
+- Provide empty, loading, error, and no-results states.
 
-Família única: **Inter** (400, 500, 600). Números de dinheiro com `font-variant-numeric: tabular-nums`.
+### Financial chart
+- State period and unit; explain whether data are gross/net and historical/projected.
+- Provide text or tabular alternative.
+- Avoid implying guaranteed returns or using decorative upward trends.
+- Gains/losses require signs and text in addition to colors.
 
-| Estilo | Tamanho / altura | Peso | Uso |
+### Navigation
+- Desktop: sidebar for authenticated area; top navigation for public website.
+- Mobile: bottom navigation for 3–5 top-level destinations; secondary actions inside contextual screens.
+- Clearly distinguish active, hover and keyboard focus states.
+
+## Product patterns
+- Portfolio overview: total invested/patrimony, time period, performance methodology, allocation, next actions.
+- Product details: risk, liquidity, minimum, fees, tax, issuer and protections where applicable, shown before confirmation.
+- Investment confirmation: amount, destination, settlement, cost, risk disclosure and explicit confirmation.
+- Human support: visible entry point; clear expected response channel/time, never invent SLA.
+- Education: contextual explanations without blocking experienced users.
+
+## Figma structure
+Pages:
+00 Cover & Guidelines
+01 Brand Foundations
+02 Product Foundations
+03 Components
+04 Patterns & Templates
+
+Variable collections:
+- Primitives: color, spacing, radius, dimensions.
+- Semantic: background, foreground, border, action, feedback, focus (mode: Light; Dark reserved).
+- Layout: breakpoints, grid, container and spacing roles.
+
+Component naming examples:
+- Button / Primary / Medium
+- Input / Text / Default
+- Card / Portfolio / Summary
+- Navigation / Sidebar / Item
+- Feedback / Alert / Warning
+
+Prefer component properties for variant, size, state, icon visibility, and content. Use Auto Layout, constraints and accessible annotations.
+
+## Open decisions
+- Final proprietary wordmark design and trademark check.
+- Final abstract image/graphic library.
+- Semantic contrast audit and interactive state color values.
+- First reference flow and prioritized components.
+- Regulatory and legal review for actual brokerage deployment.
+
+## Implementation notes
+Suitable for React + Tailwind + shadcn/ui; map semantic Figma variables to CSS custom properties, not direct primitive hex values in components. This document is a design specification, not an importable Figma library.
+
+---
+
+## v0.3 — Dashboard & Portfolio experience (2026-10-31)
+Status: design proposal; pending user review and accessibility validation. All financial values and products in mockups are illustrative, not factual product offers.
+
+### Decisions
+- Primary reference flow: dashboard and investment portfolio.
+- Desktop navigation: hybrid. Global topbar for search, notifications, help and account; persistent left sidebar for primary destinations; local tabs within content. Avoid a permanent third navigation rail.
+- Responsive system: same semantic foundations and component APIs, different layout and navigation compositions for desktop and mobile.
+- Information density: balanced, with progressive disclosure. Never conceal risk, fees, liquidity, taxation or material terms at investment confirmation.
+- Primary actions use Deep Moss; orange is an accent, not a competing primary action or semantic success indicator.
+
+### Information architecture
+Primary destinations: Início, Carteira, Investir, Aprender, Atendimento. Account and settings via topbar profile. Desktop sidebar may collapse. Mobile bottom bar: Início, Carteira, Investir, Aprender, Mais (Atendimento prominently available from Mais and contextual help); 5 items maximum. Search and notifications in mobile header. The labels are provisional and should be tested with beginners.
+
+### Screen specifications
+**Desktop Dashboard — 1440px reference**
+- Global topbar 64px tall. Sidebar 224px expanded, 72px collapsed. Content maximum 1200px with 24px gutters, responsive.
+- Greeting with as-of timestamp, privacy toggle for financial values, and period control.
+- Primary summary: patrimônio total, performance with explicit period and calculation basis, chart with accessible table alternative and loading/error/empty states.
+- Allocation summary: category shares with both percentages and currency values; never rely solely on color.
+- Actions: Investir, Transferir, Resgatar, Falar com especialista; show only contextually valid actions.
+- Holdings: product name, type, current value, performance period, liquidity; sort/filter and link to details. Do not conflate cash flows and investment return.
+- Educational next steps and human support after financial overview, not replacing critical data.
+
+**Desktop Carteira**
+- Portfolio totals and as-of timestamp; allocation by class; tabs: Posições, Movimentações, Rentabilidade.
+- Posições table: Produto, Categoria, Saldo, Rentabilidade (with reference period), Liquidez, Ações. Support keyboard sorting and explicit sort order; avoid horizontal scroll at desktop widths.
+- Details drawer or dedicated page: issuer, guarantees (when applicable), fees, taxation, maturity, liquidity, risks and relevant documents.
+
+**Mobile Dashboard — 390px reference**
+- Compact header with brand, notifications and account. Bottom navigation persistent where appropriate; avoid covering content or keyboard.
+- Summary card first; chart with selectable periods and textual summary; quick actions in 2×2 grid; allocation list with text labels and values; recent holdings preview; help entry point.
+- 16px side gutters, minimum 44×44px touch targets, safe-area insets; use no horizontal scroll for core data.
+
+**Mobile Carteira**
+- Summary and period selector; segmented local tabs (Posições / Movimentações / Rentabilidade).
+- Holdings as stacked rows/cards with product, current value, category and liquidity; details open a dedicated view. Long labels wrap, monetary values remain legible at 200% text zoom.
+
+### Responsive layout tokens
+| Token | Value |
+|---|---|
+| breakpoint.sm | 640px |
+| breakpoint.md | 768px |
+| breakpoint.lg | 1024px |
+| breakpoint.xl | 1280px |
+| layout.mobile.gutter | 16px |
+| layout.tablet.gutter | 24px |
+| layout.desktop.gutter | 32px |
+| layout.desktop.sidebar | 224px |
+| layout.desktop.sidebar.collapsed | 72px |
+| layout.desktop.topbar | 64px |
+| layout.mobile.bottomNav | 64px + safe area |
+| layout.content.max | 1200px |
+
+Breakpoints are implementation starting points, not device categories; test intermediate widths and content-driven behavior.
+
+### Component additions
+- AppShell: desktop(topbar + sidebar + main), mobile(header + bottom nav + main).
+- NavItem: default, hover, active, focus-visible, disabled; icon + label and aria-current.
+- PortfolioSummary: loading, populated, empty, error, hidden-values; amount, as-of timestamp, period and trend.
+- PerformanceChart: 1M, 3M, 6M, 1A, all; tooltip keyboard equivalent; tabular alternative; empty/error/loading; label baseline and returns methodology.
+- AllocationBreakdown: chart + legend/list; percentages and currency values; no color-only encoding.
+- HoldingRow: product, category, balance, return period, liquidity, details; loading/empty/error.
+- QuickAction: default, focus, disabled, pending; optional contextual explanation.
+- FilterTabs: selected, unselected, focus, disabled; semantic tab behavior only when controlling tabpanels.
+- PrivacyToggle: visible/hidden balances; must also hide chart tooltip and accessible descriptions containing sensitive amounts.
+- SupportEntry: contextual assistance and handoff to a human; clear availability status without fabricated response-time guarantees.
+
+### Figma component conventions
+- `Navigation/AppShell`, `Navigation/SidebarItem`, `Navigation/BottomNavItem`
+- `DataDisplay/PortfolioSummary`, `DataDisplay/AllocationBreakdown`, `DataDisplay/HoldingRow`, `DataViz/PerformanceChart`
+- `Actions/QuickAction`, `Controls/PeriodSelector`, `Controls/PrivacyToggle`, `Support/EntryPoint`
+- Component properties: `variant`, `size`, `state`, `icon`, `label`, `showDescription` as appropriate. Prefer boolean/text properties and instance swaps over detached duplicates.
+- Use Auto Layout, constraints, variables and accessible text styles. Create desktop and mobile composition variants rather than scaling components proportionally.
+
+### Interaction and accessibility requirements
+- WCAG 2.2 AA target; verify actual contrast, keyboard order, focus indicator, semantic labels and zoom/reflow.
+- Financial trends require positive/negative labels, comparison period and a non-color indicator. Orange is not a warning or positive-return semantic by default.
+- Loading: skeleton or progress label; empty: explanation and next action; error: recovery and timestamp of last valid data where known.
+- Show updated-at timestamp, data source or calculation method where material; distinguish market movement from deposits and withdrawals.
+- Never imply guaranteed performance; illustrative data must be labeled.
+- Confirm irreversible or financially consequential actions with a summary of material terms.
+
+### Implementation guidance
+- React + Tailwind + shadcn/ui is the reference stack, not a mandatory dependency.
+- Keep semantic CSS variables separate from raw brand values; use `font-variant-numeric: tabular-nums` for balances and tables.
+- Build accessible table and chart alternatives; avoid hardcoding return signs or colors into domain logic.
+- Test 320px, 390px, 768px, 1024px and 1440px widths, keyboard-only, reduced motion and 200% text zoom.
+
+### Open decisions for v0.4
+1. Is the main dashboard goal portfolio monitoring or guidance toward a next investment?
+2. Should financial amounts be visible by default or hidden until explicitly revealed?
+3. Which portfolio performance metric should lead: nominal return, percentage return or benchmark-relative return?
+4. Confirm the five-item mobile navigation taxonomy with usability testing.
+
+---
+
+## v0.4 — Dashboard & Carteira UX refinement (2026-10-31)
+**Approved:** dashboard priority B (balanced monitoring + next-step guidance); privacy A (balances shown by default, user can hide). Status: specification draft, not implemented or published to Figma.
+
+### Trust and financial precision
+- Never use evaluative copy such as "Seu patrimônio está rendendo bem" without objective criteria and user context. Prefer "Veja como seu patrimônio mudou no período".
+- Separate **patrimônio atual**, **valor investido**, **resultado acumulado**, **aportes/resgates** and **saldo disponível**; never present cashflow as returns.
+- Every performance figure must label period, calculation basis (gross/net), source, and last update; show explicit `—` if unknown, not 0%.
+- Display both amount and percentage when supported, with matching dates and methodology. Do not compare to CDI without a valid benchmark-series calculation.
+- Avoid predictive rising-line decoration; graph axes and period markers must be meaningful. Use text equivalents and keyboard-accessible data table.
+- Product risks, liquidity, costs and settlement conditions remain discoverable from holding detail. No guaranteed-return framing.
+
+### Desktop Dashboard proposed hierarchy
+1. Topbar: brand, global search, notifications, help, account. Left sidebar: Início, Carteira, Investir, Aprender, Atendimento; active state unique.
+2. Page heading "Visão geral" with `Dados atualizados em ...` and contextual support.
+3. Financial overview: patrimônio amount + privacy toggle + period selector; supporting "Investido", "Saldo disponível", "Resultado no período" with labelled metrics.
+4. Performance chart with deposit/withdrawal indicators, dates and text/table alternative.
+5. Allocation (with category labels, percentage and value) plus quick actions Investir, Transferir, Resgatar; actions must specify eligibility and limits.
+6. Next-step guidance: educational message, not unsolicited financial recommendation; support entry.
+7. Recent positions with link "Ver carteira completa".
+
+### Desktop Carteira proposed hierarchy
+- Heading "Minha carteira" with updated-at timestamp and explicit total.
+- Tabs Posições, Movimentações, Rentabilidade with semantic descriptions.
+- Filters: categoria, liquidez, ordenação and search; responsive to longer labels.
+- Holdings table columns: Produto, Categoria, Saldo atual, Valor investido, Resultado no período, Liquidez, Detalhes; right align currency and numeric data.
+- Details must distinguish issuer from distributor; omit unknown fields rather than invent values.
+- Totals must equal holdings and show any excluded pending operations separately.
+
+### Mobile-specific changes
+- Home: overview card first; values toggle always reachable, then timeframe, 1 concise performance summary, actions, allocation list, contextual next step and holdings preview.
+- Carteira: show compact holding rows with name, current amount, category and liquidity; drill-down for return and transaction history; never shrink numerical labels to fit.
+- Bottom navigation five or fewer items, with context-specific support access; avoid duplicate permanent navigation.
+- Privacy toggle defaults to visible, persists user choice only where permitted, and obscures balances in charts, tooltips, summaries, accessibility labels, notifications and background app previews. Consider optional "ocultar ao sair" in settings.
+
+### Component & state contracts
+- `DataDisplay/FinancialOverview`: populated, loading, empty, error, values-hidden; fields `asOf`, `total`, `invested`, `available`, `resultAbsolute`, `resultPercent`, `basis`, `period`.
+- `Controls/PrivacyToggle`: shown/hidden, focus, disabled; explicit accessible text "Ocultar valores" / "Mostrar valores"; control all dependent surfaces via one state.
+- `DataViz/PerformanceChart`: loading, no-data, partial-data, error, populated; trend accessibility, flows annotations, time selection, calculation explanation.
+- `DataDisplay/HoldingRow`: default, focus, active, loading, error; product name, class, balance, liquidity and disclosed period.
+- `DataDisplay/AllocationBreakdown`: categorical numeric legend + data visualization + total; category colors cannot be the only distinguisher.
+- `Guidance/NextStep`: educational, personalized-if-authorized, unavailable; must be identified as information vs regulated recommendation.
+
+### Example UI copy
+- Dashboard heading: "Seu patrimônio, com clareza."
+- Secondary: "Acompanhe seus investimentos e entenda as mudanças no período."
+- Update: "Atualizado em 31 out 2026, 11h30" **only when backed by a real timestamp**.
+- Empty returns: "Ainda não há dados suficientes para calcular o resultado deste período."
+- Privacy toggle: "Ocultar valores" / "Mostrar valores".
+- Next step: "Conheça como funciona a liquidez antes de investir."
+
+### Deliverable limitations
+- The editable SVG board is a handoff artifact; importing SVG into Figma creates editable vector/text nodes where supported, not native Figma components, variables or Auto Layout. Those must be configured within Figma.
+- No modifications have been made to the user's linked Figma file in this version.
+
+---
+
+## Decisões do Figma sobre a v0.4 (31/10/2026)
+
+Arquivo: https://www.figma.com/design/tl9FFynv0PPlTdnLkGVPPb (páginas 00 a 04). Onde o Figma diverge deste documento, vale o Figma, pelos motivos abaixo.
+
+| Tema | v0.4 | Figma | Por quê |
 | --- | --- | --- | --- |
-| Display | 32 / 40 | 600 | Título de impacto (tela de golpe) |
-| Título | 24 / 32 | 600 | Título de tela |
-| Subtítulo | 20 / 28 | 600 | Título de card ou seção |
-| Valor | 28 / 36 | 600 | Valores em R$ |
-| Corpo | 16 / 24 | 400 | Texto corrido |
-| Corpo destaque | 16 / 24 | 600 | Ênfase, rótulo de botão |
-| Rótulo | 16 / 24 | 500 | Rótulo de campo, chip, badge |
+| Borda de campo | `neutral.200` (1,25:1) | `border/input` = `neutral.500` (5,0:1) | WCAG 1.4.11 pede 3:1 no limite de controle |
+| Anel de foco | `brand.orange` (provisório) | anel duplo: 2px branco + 2px `neutral.900` | laranja dá 2,5:1 sobre ivory |
+| Texto secundário | `neutral.500` | igual; `neutral.400` nunca em texto | `neutral.400` dá 2,5:1 |
+| Leafy | cor de apoio | só grafismo e dado, nunca texto | 2,7:1 no branco |
+| Fundos de feedback | não definidos | `green-50` `#E7F2EB`, `red-50` `#F8E7E6`, `orange-50` `#FBEBDD` | status precisam de fundo sutil legível |
+| Estados de ação | não definidos | hover `neutral.700`, pressed `neutral.900` (provisório) | auditoria pendente |
+| Navegação mobile | Início, Carteira, Investir, Aprender, Mais | Início, Carteira, Investir, Aprender, **Atendimento** | o humano nunca fica escondido em "Mais" |
 
-### 3.3 Espaçamento, raio e tamanho
+## Regras do case que viram regra de interface
 
-| Token | Valor |
-| --- | ---: |
-| `--espaco-1` | 4px |
-| `--espaco-2` | 8px |
-| `--espaco-3` | 12px |
-| `--espaco-4` | 16px |
-| `--espaco-6` | 24px |
-| `--espaco-8` | 32px |
-| `--espaco-12` | 48px |
-| `--raio-sm` | 8px (chip de fonte) |
-| `--raio-md` | 10px (botão, campo, alerta) |
-| `--raio-lg` | 14px (card) |
-| `--raio-pill` | 999px (chip de filtro, badge) |
-| `--alvo-toque` | 48px |
+1. **Fonte em toda informação factual:** `KB-xxx`, `OP-xxxxx` ou `P-xxxx`, em texto visível.
+2. **Saída para pessoa em toda tela de atendimento.** Das 8h às 20h, com espera estimada; fora disso, protocolo e "volta às 8h". Segurança 24h.
+3. **Golpe interrompe:** sinal de golpe troca a tela inteira pelo fluxo de segurança (`feedback/danger`), sem responder a pergunta original.
+4. **Sem recomendação:** conteúdo educativo leva o rótulo "não é recomendação"; pedido de onde investir vai para o especialista com agendamento.
+5. **Datas, IR e rendimento vêm do motor** (`motor/caqui_motor.py`), nunca do LLM. A tela mostra o motivo de cada data ("02/11 é feriado").
+6. **Protocolo visível** em toda conversa e transferência: o cliente nunca repete a demanda.
+7. **"Fazer uma reclamação" e "Encerrar minha conta"** acessíveis em qualquer passo do atendimento.
 
-Margem lateral de tela: 16px. Espaço entre cards: 12–16px. Padding de card: 16px.
-
-**Elevação:** sem sombra e quase sem borda. Card branco sobre fundo zinc-100. A única sombra é a do item selecionado no controle segmentado (0 1px 3px, 8%).
-
-### 3.4 CSS pronto para colar
+## Tokens prontos para o código
 
 ```css
 :root {
-  --cor-tinta: #09090B;
-  --cor-suave: #6B6B73;
-  --cor-linha: #E4E4E7;
-  --cor-fundo: #F4F4F5;
-  --cor-superficie: #FFFFFF;
-  --cor-primaria: #1E4D33;
-  --cor-primaria-suave: #E8F0EA;
-  --cor-destaque: #D95E00;
-  --cor-destaque-suave: #FFF1E6;
-  --cor-perigo: #B3261E;
-  --cor-perigo-suave: #FDECEA;
-  --cor-desabilitado: #A1A1AA;
+  /* primitivas */
+  --moss: #0B2B18; --ivory: #DDD2B7; --leafy: #82A591; --orange: #D95E00;
+  --n50: #FAFAF7; --n100: #F4F5F0; --n200: #E5E7E1; --n300: #CDD3CA;
+  --n400: #9BA69C; --n500: #66736B; --n700: #35473B; --n900: #17251D;
+  --green-700: #247A4B; --green-50: #E7F2EB; --red-700: #B63C35; --red-50: #F8E7E6; --orange-50: #FBEBDD;
 
-  /* nomes do shadcn/ui apontando para os tokens da Caqui */
-  --background: var(--cor-fundo);
-  --foreground: var(--cor-tinta);
-  --card: var(--cor-superficie);
-  --primary: var(--cor-primaria);
+  /* semânticos (nomes do shadcn/ui) */
+  --background: var(--n50);
+  --foreground: var(--n900);
+  --card: #FFFFFF;
+  --card-foreground: var(--n900);
+  --muted: var(--n100);
+  --muted-foreground: var(--n500);
+  --border: var(--n200);
+  --input: var(--n500);
+  --primary: var(--moss);
   --primary-foreground: #FFFFFF;
-  --muted: var(--cor-fundo);
-  --muted-foreground: var(--cor-suave);
-  --border: var(--cor-linha);
-  --input: var(--cor-suave);
-  --destructive: var(--cor-perigo);
-  --ring: var(--cor-tinta);
-  --radius: 10px;
+  --secondary: var(--ivory);
+  --secondary-foreground: var(--n900);
+  --accent: var(--orange);
+  --destructive: var(--red-700);
+  --success: var(--green-700);
+  --ring: var(--n900);
+  --radius: 8px;
 
-  --fonte: "Inter", system-ui, sans-serif;
-  --texto-display: 600 2rem/2.5rem var(--fonte);
-  --texto-titulo: 600 1.5rem/2rem var(--fonte);
-  --texto-subtitulo: 600 1.25rem/1.75rem var(--fonte);
-  --texto-valor: 600 1.75rem/2.25rem var(--fonte);
-  --texto-corpo: 400 1rem/1.5rem var(--fonte);
-  --texto-corpo-destaque: 600 1rem/1.5rem var(--fonte);
-  --texto-rotulo: 500 1rem/1.5rem var(--fonte);
-
-  --espaco-1: 4px; --espaco-2: 8px; --espaco-3: 12px; --espaco-4: 16px;
-  --espaco-6: 24px; --espaco-8: 32px; --espaco-12: 48px;
-  --raio-sm: 8px; --raio-md: 10px; --raio-lg: 14px; --raio-pill: 999px;
-  --alvo-toque: 48px;
+  --font-heading: "Manrope", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
 }
 
-html { font-size: 100%; } /* respeita o zoom do sistema; nunca fixe em px */
-body { font: var(--texto-corpo); color: var(--cor-tinta); background: var(--cor-fundo); }
-/* anel duplo: visível sobre qualquer fundo */
-:focus-visible { outline: 2px solid var(--cor-tinta); outline-offset: 2px; box-shadow: 0 0 0 2px #FFFFFF; }
-.valor { font: var(--texto-valor); font-variant-numeric: tabular-nums; }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; box-shadow: 0 0 0 2px #FFFFFF; }
+.valor { font-variant-numeric: tabular-nums; }
 ```
 
-### 3.5 Tailwind (opcional)
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        tinta: "#09090B", suave: "#6B6B73", linha: "#E4E4E7",
-        fundo: "#F4F4F5", superficie: "#FFFFFF",
-        primaria: { DEFAULT: "#1E4D33", suave: "#E8F0EA" },
-        destaque: { DEFAULT: "#D95E00", suave: "#FFF1E6" },
-        perigo: { DEFAULT: "#B3261E", suave: "#FDECEA" },
-        desabilitado: "#A1A1AA",
-      },
-      fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
-      fontSize: {
-        display: ["2rem", { lineHeight: "2.5rem", fontWeight: "600" }],
-        titulo: ["1.5rem", { lineHeight: "2rem", fontWeight: "600" }],
-        subtitulo: ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600" }],
-        valor: ["1.75rem", { lineHeight: "2.25rem", fontWeight: "600" }],
-        corpo: ["1rem", { lineHeight: "1.5rem" }],
-      },
-      borderRadius: { sm: "8px", md: "10px", lg: "14px" },
-      minHeight: { toque: "48px" },
-    },
-  },
-};
-```
-
-Não use `text-xs` nem `text-sm` no produto.
-
-## 4. Componentes
-
-Todos estão no Figma com os mesmos nomes. Os nomes de variante são `Propriedade=Valor`.
-
-| Componente | Variantes | Regras de uso | Acessibilidade no código |
-| --- | --- | --- | --- |
-| **Botão** | Tipo: Primário (verde), Secundário (contorno), Terciário (link), Segurança · Estado: Padrão, Foco, Desabilitado | Um primário por tela. O rótulo diz a ação ("Confirmar resgate", nunca "OK"). Segurança só no fluxo de golpe. Desabilitado sempre com o motivo escrito ao lado. | `<button>`; desabilitado com `aria-disabled` e texto explicativo ligado por `aria-describedby` |
-| **Botão de ícone** | Tipo: Primário, Secundário · Ícone (troca) | 48×48. Usado em voltar e avançar. | `aria-label` obrigatório ("Voltar") |
-| **Campo de texto** | Estado: Padrão, Foco, Erro, Desabilitado | Rótulo acima, ajuda abaixo com ícone. O erro diz como corrigir ("Digite até R$ 40.791,24"). Borda `--cor-suave`. | `<label for>`, `aria-describedby` na ajuda, `aria-invalid` no erro, `inputmode="decimal"` para valor |
-| **Radio** | Selecionado: Sim, Não | Escolha única entre 2 e 5 opções, cada uma com texto completo (produto + saldo). | `fieldset` + `legend` |
-| **Checkbox** | Selecionado: Sim, Não | Confirmação de entendimento antes de ação com dinheiro. | Área clicável inclui o texto |
-| **Switch** | Selecionado: Sim, Não | Liga na hora, sem salvar. O texto descreve o que liga. | `role="switch"`, `aria-checked` |
-| **Chip de filtro** | Selecionado: Sim, Não | Selecionado tem check e fundo musgo. | `aria-pressed` |
-| **Chip de fonte** | texto | Sempre que houver fato: KB, OP ou P. | Pode ser link para o artigo |
-| **Status da operação** | Liquidada, Em processamento, Pendente, Recusada | Espelha `status` de `operacoes.csv`. Ícone + texto. | Texto lido pelo leitor de tela; ícone `aria-hidden` |
-| **Card de investimento** | texto | Diz se o valor é bruto ou líquido. Mostra a posição de origem. O card inteiro é o alvo. | Um único link ou botão envolvendo o card |
-| **Linha de extrato** | Tipo: Saída, Entrada | Sinal + ou −, ícone de direção, número da operação e status. | Lista `<ul>` |
-| **Barra de progresso** | texto | O número escrito é a informação; a barra só reforça. Laranja só aqui. | `role="progressbar"`, `aria-valuenow`, `aria-valuemax` |
-| **Passo de linha do tempo** | Estado: feito, atual, futuro | Cada data traz o motivo ("02/11 é feriado"). Datas vêm do motor. | Lista ordenada `<ol>`, passo atual com `aria-current="step"` |
-| **Alerta** | Tipo: Info, Atenção, Segurança · Mostrar ação | Ícone + título + texto + ação opcional. A borda esquerda de 4px reforça o tipo. | Info e Atenção: `role="status"`; Segurança: `role="alert"` |
-| **Mensagem** | Autor: Cliente, Caqui | Cliente à direita em musgo. Caqui à esquerda, com fontes. | Região com `aria-live="polite"` |
-| **Barra "Falar com uma pessoa"** | Status (texto) | Fixa no rodapé. Mostra a espera estimada, ou protocolo e horário fora do expediente. | Botão com texto completo, nunca só ícone |
-| **Cabeçalho** | Mostrar voltar | O título é o `h1` da tela. | Voltar com `aria-label` |
-| **Tab bar** | 4 itens | Início, Investir, Atendimento, Perfil. Rótulos sempre visíveis. Item ativo com indicador e peso. | `nav` + `aria-current="page"` |
-| **Modal · Confirmar resgate** | conteúdo | Repete valor, origem, destino e data calculada. Checkbox de entendimento libera o botão. | `role="dialog"`, `aria-modal`, foco preso, Esc fecha |
-| **Toast** | texto | Confirma o que aconteceu, com protocolo. Fica no mínimo 6s e nunca leva ação crítica. | `role="status"` |
-| **Estado vazio** | texto | Explica o que vai aparecer e dá o próximo passo. | |
-| **Estado de erro** | texto | Primeiro tranquiliza sobre o dinheiro. Oferece tentar de novo e pessoa. Nunca culpa o cliente. | Foco vai para o título do erro |
-| **Ícones** | 21 ícones (Lucide, ISC) | 24px, traço de 2px, cor da variável. | Decorativo: `aria-hidden`; sozinho: `aria-label` |
-
-## 5. Padrões de tela
-
-| Padrão | Quando | Composição |
-| --- | --- | --- |
-| **Home** | Abertura do app | Ordem fixa: o que está em andamento, patrimônio (bruto e líquido rotulados), avisos de calendário, investimentos com liquidez escrita, pessoa a um toque, aprender sem recomendar, lembrete de segurança. Ver página "Home · Conceito" no Figma. |
-| **Rastreio de resgate** | Qualquer resgate em andamento | Cabeçalho, card de resumo (valor + data de pagamento + "não sumiu"), linha do tempo, barra de pessoa |
-| **Resposta com fonte** | Pergunta factual no atendimento | Mensagem da Caqui com a conta aberta (bruto, IR, líquido) + chips de fonte + respostas rápidas |
-| **Golpe interrompe** | A triagem detecta sinal de golpe | Tela inteira `--cor-perigo`: o que fazer em 3 passos, "Bloquear acesso", "Falar com a segurança" (24h). A pergunta original fica salva no protocolo. |
-| **Fora do horário** | Pedido de pessoa fora das 8h–20h | Protocolo, horário de retorno, alerta de segurança 24h. Nunca promete humano. |
-| **Pedido de recomendação** | Cliente pede onde investir | Recusa em uma frase, agenda com especialista, conceitos que podem ser explicados |
-| **Confirmação de dinheiro** | Antes de qualquer resgate ou aplicação | Modal de confirmação. Cliente 60+ com resgate total ou atípico: alerta e oferta de pessoa **antes** do modal. |
-
-## 6. Voz e texto
-
-- Frases curtas, com menos de 20 palavras. Uma ideia por frase.
-- Responda ao medo antes da pergunta: "Seu dinheiro não sumiu" vem antes do prazo.
-- Data sempre com dia da semana: "05/11/2026, quinta".
-- Valores sempre com R$ e dizendo se são bruto ou líquido.
-- Nada de jargão sem explicação: "cotização" vem com "1 dia útil após o pedido".
-- Não sabe? Diga que não sabe e ofereça uma pessoa. Nunca invente prazo ou taxa.
-- Nunca: "Recomendo", "melhor opção para você", "coloque em".
-
-## 7. Checklist antes de publicar
-
-- [ ] Nenhum texto abaixo de 16px (procure `text-xs`, `text-sm`, `font-size: 1[0-5]px`)
-- [ ] Todo controle com 48px ou mais
-- [ ] Zoom de 200% sem cortar conteúdo
-- [ ] Navegação só por teclado, com foco visível em tudo
-- [ ] Leitor de tela anuncia status, erros e mensagens novas
-- [ ] Nenhum estado transmitido só por cor
-- [ ] Toda frase factual com chip de fonte
-- [ ] Barra "Falar com uma pessoa" presente em toda tela de atendimento
-- [ ] Teste às 14h e às 23h: humano com espera, depois protocolo
-- [ ] Teste de golpe no meio da frase: a tela troca na hora
-- [ ] CPF sempre mascarado na tela e no log
-
-## 8. Hipóteses de design ainda não validadas
-
-Isto é intenção, não fato. Validar com pessoas antes de defender como resultado.
-
-- Base neutra com verde Caqui transmite calma e confiança para quem vem da poupança, sem parecer genérica.
-- A tela de golpe vermelha e cheia não paralisa a pessoa idosa.
-- A linha do tempo proativa reduz os contatos de "onde está meu dinheiro".
-- Corpo de 16px em todo o app não deixa o Rafael achando a interface "infantil".
+Escala tipográfica no código: Display 48/56, H1 36/44, H2 28/36, H3 22/30 (Manrope 600); Body large 16/24, Body 14/22, Label 14/20 (500), Caption 12/18 só para informação não crítica, Valor 28/36 (Inter 600, `tabular-nums`). Controles: 32 / 40 / 48 px; alvo de toque mínimo de 44×44 no mobile.
