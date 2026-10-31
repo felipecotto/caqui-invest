@@ -1,0 +1,5 @@
+#!/bin/sh
+# Bloqueia o commit se alguma regra do case quebrar, se a triagem cair
+# ou se aparecer segredo ou CPF sem máscara. Ative com:
+#   git config core.hooksPath .githooks
+exec sh scripts/verificar.sh
